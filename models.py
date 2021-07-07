@@ -11,7 +11,6 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(64))
     email = Column(String(64))
-    chip = relationship("Chip")
 
     def __repr__(self):
        return f"User(id={self.id!r}, name={self.name!r}"
@@ -30,6 +29,6 @@ class Chip(Base):
     __tablename__ = 'chip'
     id = Column(Integer, primary_key=True)
     iccid = Column(String(32))
-
+    user = relationship("User")
 
 # Base.metadata.create_all(engine)
