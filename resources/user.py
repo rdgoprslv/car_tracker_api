@@ -5,7 +5,7 @@ from database import Session, User
 
 
 class UserResource():
-    def on_post(self, req:falcon.Request, resp):
+    def on_post(self, req, resp):
         if 'email' not in req.media or 'name' not in req.media:
             raise falcon.HTTPBadRequest(description="Not enough parameters")
 
@@ -23,3 +23,10 @@ class UserResource():
         with Session() as session:
             users = session.query(User).all()
             resp.text = json.dumps({'users': [repr(u) for u in users]})
+
+    def on_get_single(self, req, resp, user_id):
+        with Session() as session:
+            user = session.query(User).filter(User.id == user_id).first()
+            if user is None:
+                raise falcon.HTTPBadRequest(description="User doesn't exist")
+            resp.text = json.dumps({'user': repr(user)})

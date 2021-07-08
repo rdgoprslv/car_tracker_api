@@ -7,6 +7,7 @@ from database import create_db
 def create_app():
     app = falcon.App()
     app.add_route('/user', UserResource())
+    app.add_route('/user/{user_id}', UserResource(), suffix="single")
 
     create_db()
 

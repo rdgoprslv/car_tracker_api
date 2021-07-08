@@ -26,7 +26,7 @@ class Locations(Base):
     timestamp = Column(TIMESTAMP)
     user = Column(Integer, ForeignKey('user.id'))
 
-    def get_maps_search_link():
+    def get_maps_search_link(self):
         return f"https://www.google.com/maps/search/{self.lat:0.6f}%20{self.lon:0.6f}"
 
 
