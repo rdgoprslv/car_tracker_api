@@ -8,6 +8,8 @@ def create_app():
     app = falcon.App()
     app.add_route('/user', UserResource())
     app.add_route('/user/{user_id}', UserResource(), suffix="single")
+    app.add_route('/chip', ChipResource())
+    app.add_route('/chip/{chip_id}', ChipResource(), suffix="single")
 
     create_db()
 

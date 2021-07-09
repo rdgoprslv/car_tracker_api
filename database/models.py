@@ -15,7 +15,7 @@ class User(Base):
     chip = relationship("Chip", back_populates="user", uselist=False)
 
     def __repr__(self):
-        return f"User(id={self.id!r}, name={self.name!r}, email={self.email!r})"
+        return f"User(id={self.id!r}, name={self.name!r}, email={self.email!r}, chip={self.chip!r})"
 
 
 class Locations(Base):
@@ -35,8 +35,10 @@ class Chip(Base):
     id = Column(Integer, primary_key=True)
     iccid = Column(String(32))
 
-    chip = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id'), unique=True)
     user = relationship("User", back_populates='chip')
 
+    def __repr__(self):
+        return f"Chip(id={self.id!r}, iccid={self.iccid!r}, user_id={self.user_id!r})"
 
 # historico de donos do chip?

@@ -1,2 +1,2 @@
 from .user import UserResource
-# from .chip import
+from .chip import ChipResource
