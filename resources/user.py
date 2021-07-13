@@ -14,6 +14,9 @@ class UserResource():
         user_name = media.get('name')
 
         with Session() as session:
+            user = session.query(User).filter(User.email==user_email).first()
+            if user is not None:
+                raise falcon.HTTPBadRequest(description="User already registered")
             user = User(name=user_name, email=user_email)
             session.add(user)
             session.commit()

@@ -13,11 +13,13 @@ class ChipResource():
         chip_iccid = media.get('iccid')
 
         with Session() as session:
+            chip = session.query(Chip).filter(Chip.iccid==chip_iccid).first()
+            if chip is not None:
+                raise falcon.HTTPBadRequest(description="A chip with this ICCID already exists")
             chip = Chip(iccid=chip_iccid)
             session.add(chip)
             session.commit()
             resp.text = json.dumps({'chip': repr(chip)})
-            # print(chip.user.id)
 
     def on_get(self, req, resp):
         with Session() as session:
