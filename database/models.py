@@ -15,7 +15,7 @@ class User(Base):
     chip = relationship("Chip", back_populates="user", uselist=False)
 
     def __repr__(self):
-        return dumps(dict(id=self.id, name=self.name, email=self.email, chip=repr(self.chip)))
+        return dumps(dict(id=self.id, name=self.name, email=self.email, chip=self.chip and self.chip.as_dict()))
 
 
 class Location(Base):
@@ -44,5 +44,8 @@ class Chip(Base):
 
     def __repr__(self):
         return dumps(dict(id=self.id, iccid=self.iccid, user_id=self.user_id))
+
+    def as_dict(self):
+        return dict(id=self.id, iccid=self.iccid, user_id=self.user_id)
 
 # historico de donos do chip?

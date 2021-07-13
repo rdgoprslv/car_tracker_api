@@ -1,5 +1,3 @@
-import json
-
 import falcon
 from database import Session, Chip, User
 
@@ -19,19 +17,19 @@ class ChipResource():
             chip = Chip(iccid=chip_iccid)
             session.add(chip)
             session.commit()
-            resp.text = json.dumps({'chip': repr(chip)})
+            resp.text = repr(chip)
 
     def on_get(self, req, resp):
         with Session() as session:
             chips = session.query(Chip).all()
-            resp.text = json.dumps({'chips': [repr(c) for c in chips]})
+            resp.text = repr(chips)
 
     def on_get_single(self, req, resp, chip_id):
         with Session() as session:
             chip = session.query(Chip).filter(Chip.id == chip_id).first()
             if chip is None:
                 raise falcon.HTTPBadRequest(description="Chip doesn't exist")
-            resp.text = json.dumps({'chip': repr(chip)})
+            resp.text = repr(chip)
 
     def on_patch(self, req, resp):
         if 'chip_id' not in req.media or 'user_id' not in req.media:
@@ -50,4 +48,4 @@ class ChipResource():
             user.chip = chip
             chip.user = user
             session.commit()
-            resp.text = json.dumps(dict(User=repr(user), Chip=repr(chip)))
+            resp.text = repr(user)

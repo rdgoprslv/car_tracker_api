@@ -14,7 +14,8 @@ def create_app():
     app.add_route('/chip/{chip_id}', ChipResource(), suffix="single")
 
     app.add_route('/location', LocationResource())
-    app.add_route('/location/{user_id}', LocationResource(), suffix="last")
+    app.add_route('/location/{user_id}/last', LocationResource(), suffix="last")
+    app.add_route('/location/{user_id}/all', LocationResource(), suffix="user_all")
     
     create_db()
 
