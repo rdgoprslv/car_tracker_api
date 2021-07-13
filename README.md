@@ -1,5 +1,23 @@
 # API for car tracker  
 
+API developed in Python to track safety GPS devices in cars.
+
+## Setup
+
+Python 3.8 required.
+
+```bash
+python3.8 -m pip install -r requirements.txt
+```
+
+Run with:
+
+```bash
+python3.8 app.py
+```
+
+You can fiddle with it using Insomnia and ``test/Insomnia_cta.json``.
+
 ## Routes
 
 ### Create user
