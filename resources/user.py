@@ -1,25 +1,22 @@
 import falcon
 from database import Session, User
+from .utils import validate_dict
+from database.return_codes import *
 
 
 class UserResource():
     def on_post(self, req, resp):
-        if 'email' not in req.media or 'name' not in req.media:
-            raise falcon.HTTPBadRequest(description="Not enough parameters")
-
-        media = req.get_media()
-        user_email = media.get('email')
-        user_name = media.get('name')
+        if not validate_dict(['email',  'name'], req.media):
+            raise falcon.HTTPBadRequest(description=MISSING_PARAMETERS)
 
         with Session() as session:
-            user = session.query(User).filter(User.email==user_email).first()
+            user = session.query(User).filter(User.email==req.media['email']).first()
             if user is not None:
-                raise falcon.HTTPBadRequest(description="User already registered")
-            user = User(name=user_name, email=user_email)
+                raise falcon.HTTPBadRequest(description=USER_ALREADY_REGISTERED)
+            user = User(name=req.media['name'], email=req.media['email'])
             session.add(user)
             session.commit()
             resp.text = repr(user)
-
     def on_get(self, req, resp):
         with Session() as session:
             users = session.query(User).all()

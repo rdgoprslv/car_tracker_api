@@ -4,7 +4,7 @@ import falcon
 from resources import *
 from database import create_db
 
-def create_app():
+def get_app():
     app = falcon.App()
 
     app.add_route('/user', UserResource())
@@ -17,10 +17,12 @@ def create_app():
     app.add_route('/location/{user_id}/last', LocationResource(), suffix="last")
     app.add_route('/location/{user_id}/all', LocationResource(), suffix="user_all")
     
+    return app
+
+if __name__ == "__main__":
+    app = get_app()
+
     create_db()
 
     httpd = make_server('', 9000, app)
     httpd.serve_forever()
-
-if __name__ == "__main__":
-    create_app()
