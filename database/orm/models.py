@@ -17,6 +17,9 @@ class User(Base):
     def __repr__(self):
         return dumps(dict(id=self.id, name=self.name, email=self.email, chip=self.chip and self.chip.as_dict()))
 
+    def as_dict(self):
+        return dict(id=self.id, name=self.name, email=self.email, chip=self.chip)
+
 
 class Location(Base):
     __tablename__ = 'location'

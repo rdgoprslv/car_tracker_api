@@ -5,7 +5,7 @@ DB_ADAPTER = os.environ.get('DB_ADAPTER',   "pysqlite")
 DB_USER = os.environ.get('DB_USER',         "postgres")
 DB_PASS = os.environ.get('DB_PASS',         "postgres")
 DB_SERVICE = os.environ.get('DB_SERVICE',   "localhost")
-DB_PORT = os.environ.get('DB_PORT',         "5732")
+DB_PORT = os.environ.get('DB_PORT',         "5432")
 DB_NAME = os.environ.get('DB_NAME',         "car_tracker")
 
 if DB_TECH == "sqlite":

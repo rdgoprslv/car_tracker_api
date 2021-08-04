@@ -1,13 +1,19 @@
 import falcon
-from database import Session, User
+from database import Session, User, ParamsUser
 from .utils import validate_dict
 from database.return_codes import *
 
 
 class UserResource():
+    def __init__(self, user_db) -> None:
+        self.db = user_db
+
     def on_post(self, req, resp):
         if not validate_dict(['email',  'name'], req.media):
             raise falcon.HTTPBadRequest(description=MISSING_PARAMETERS)
+
+        result = self.db.create_user(ParamsUser(name=req.media['name'], email=req.media['email']))
+
 
         with Session() as session:
             user = session.query(User).filter(User.email==req.media['email']).first()
@@ -17,6 +23,7 @@ class UserResource():
             session.add(user)
             session.commit()
             resp.text = repr(user)
+            
     def on_get(self, req, resp):
         with Session() as session:
             users = session.query(User).all()
