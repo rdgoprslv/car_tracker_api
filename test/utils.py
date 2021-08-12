@@ -1,7 +1,7 @@
-from os import times
 from sqlalchemy import create_engine
 import traceback
 from datetime import datetime
+from random import randint
 
 from database import User, Chip, Location, ParamsUser, ParamsChip, ParamsLocation
 
@@ -66,15 +66,21 @@ class FakeLocation():
         self.params = ParamsLocation()
 
 
-FAKE_USERS = [
-    FakeUser(_id=1, _name='John Titor', _email='john@email.com'),
-    FakeUser(_name='Maria C. Dawn', _email='mcd@email.com'),
-]
+def get_fake_user(faker, chip_iccid: str=None):
+    return FakeUser(_name=faker.name(), _email=faker.email(), _id=randid(), _chip_iccid=chip_iccid or None)
 
-FAKE_CHIPS = [
-    FakeChip(_iccid='1234567890'),
-]
 
-FAKE_LOCATIONS = [
-    FakeLocation(_lat=-13.064, _lon=6.2343, _timestamp=1628110246, _chip_iccid='1234567890', _user_id=1),
-]
+def get_fake_chip(faker, user_id: int=None):
+    return FakeChip(_iccid=faker.bothify(text='####################'), _id=randid(), _user_id=user_id or None)
+
+
+def get_fake_location(faker, chip_iccid: str=None, user_id: int=None):
+    return FakeLocation(_lat=faker.latitude(),
+                        _lon=faker.longitude(),
+                        _timestamp=datetime.timestamp(faker.past_datetime()),
+                        _chip_iccid=chip_iccid or faker.bothify(text='####################'),
+                        _user_id=user_id or randid())
+
+
+def randid():
+    return randint(0, 10000000)

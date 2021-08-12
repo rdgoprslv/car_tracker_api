@@ -57,7 +57,7 @@ class UserI(UserInterface):
         with self.session() as session:
             user = session.query(User).filter(User.id == _id).first()
             if user is None:
-                return (NO_USER, dict())
+                return (NO_USER_WITH_ID, dict())
             return (DB_OK, user.as_dict())
 
     def get(self, params: ParamsUser) -> Tuple[str, List[dict]]:
@@ -97,8 +97,12 @@ class ChipI(ChipInterface):
             session.commit()
             return (DB_OK, chip.as_dict())
 
-    def get_by_id(self, id: int) -> Tuple[str, dict]:
-        pass
+    def get_by_id(self, _id: int) -> Tuple[str, dict]:
+        with self.session() as session:
+            chip = session.query(Chip).filter(Chip.id == _id).first()
+            if chip is None:
+                return (NO_CHIP_WITH_ID, dict())
+            return (DB_OK, chip.as_dict())
 
     def get(self, params: ParamsChip) -> Tuple[str, dict]:
         pass
@@ -115,7 +119,16 @@ class ChipI(ChipInterface):
         pass
 
     def link_chip_to_user(self, chip_id: int, user_id: int) -> Tuple[str, dict]:
-        pass
+        with self.session() as session:
+            user = session.query(User).filter(User.id==user_id).first()
+            chip = session.query(Chip).filter(Chip.id==chip_id).first()
+            if user is None or chip is None:
+                description = NO_USER_WITH_ID if user is None else NO_CHIP_WITH_ID
+                return (description, dict())
+            user.chip = chip
+            chip.user = user
+            session.commit()
+            return (DB_OK, user.as_dict())
 
 
 class LocationI(LocationInterface):
